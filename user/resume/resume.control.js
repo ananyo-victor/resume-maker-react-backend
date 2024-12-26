@@ -119,19 +119,14 @@ router.post('/upload/workExperiences/:Id', async (req, res) => {
 });
 
 
-
-
-
 // POST route for educations
 router.post('/upload/educations/:Id', async (req, res) => {
     const id = req.params.Id;
     try {
         const resume = await ResumeModel.findById(id);
         if (!resume) return res.status(404).json({ message: 'resume not found' });
-        console.log(req.body);
-        
-        resume.educations.push(req.body); // Assuming req.body.education contains a single education object
         delete req.body._id;
+        resume.educations.push(req.body); // Assuming req.body.education contains a single education object
         await resume.save();
         res.status(201).json(resume);
     } catch (error) {
@@ -140,7 +135,19 @@ router.post('/upload/educations/:Id', async (req, res) => {
 });
 
 
-
+router.post('/upload/strength/:Id', async (req, res) => {
+    const id = req.params.Id;
+    try {
+        const resume = await ResumeModel.findById(id);
+        if (!resume) return res.status(404).json({ message: 'resume not found' });
+        delete req.body._id;
+        resume.strength.push(req.body); // Assuming req.body.education contains a single education object
+        await resume.save();
+        res.status(201).json(resume);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
 
 // POST route for projects
 
@@ -178,34 +185,21 @@ router.post('/upload/projects', async (req, res) => {
 
 
 // POST route for skills
-router.post('/upload/skills', async (req, res) => {
+router.post('/upload/skills/:Id', async (req, res) => {
+    const id = req.params.Id;
     try {
-        const resume = await ResumeModel.findById(req.body.resumeId);
+        const resume = await ResumeModel.findById(id);
         if (!resume) return res.status(404).json({ message: 'resume not found' });
-        resume.skills.push(req.body.skill); // Assuming req.body.skill contains a single skill object
+        delete req.body._id;
+        console.log(req.body);
+
+        resume.skills.push(req.body); // Assuming req.body.skill contains a single skill object
         await resume.save();
         res.status(201).json(resume);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
-
-router.post('/upload/skills', async (req, res) => {
-    try {
-        const portfolio = await ResumeModel.findById(req.body.portfolioId);
-        if (!portfolio) return res.status(404).json({ message: 'Portfolio not found' });
-        delete req.body.skill._id;
-        req.body.skill.tools.forEach(tool => {
-            delete tool._id;  // Ensure no _id in the skills array
-        });
-        portfolio.skills.push(req.body.skill); // Assuming req.body.skill contains a single skill object
-        await portfolio.save();
-        res.status(201).json(portfolio);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
 
 
 // PUT update a project by ID

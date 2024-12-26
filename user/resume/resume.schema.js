@@ -29,14 +29,14 @@ const workSchema = new mongoose.Schema({
 
 const skillSchema = new mongoose.Schema({
   id: { type: Number },
-  Skill: { type: String },
-  Level: { type: String }
+  name: { type: String },
+  level: { type: String }
 });
 // skillSchema.plugin(AutoIncrement, { inc_field: 'ski_id' });
 
 const summarySchema = new mongoose.Schema({
   id: { type: Number },
-  Strength: { type: String }
+  strength: { type: String }
 });
 // summarySchema.plugin(AutoIncrement, { inc_field: 'sum_id' });
 
